@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PET Wallet Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px #aaa;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        img {
+            width: 100px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>PET Wallet Allocation Checker</h2>
+        <input type="text" id="walletInput" placeholder="Enter Wallet Address">
+        <button onclick="checkAllocation()">Check Allocation</button>
+        <h3 id="result">Enter an address above</h3>
+        <img src="https://petcoin.meme/petcoin-logo.png" alt="Petcoin Logo">
+    </div>
+
+    <script>
+        let allocations = {};
+
+        fetch('allocations.csv')
+            .then(response => response.text())
+            .then(data => {
+                let rows = data.split('\n');
+                rows.forEach(row => {
+                    let [address, amount] = row.split(',');
+                    if (address && amount) {
+                        allocations[address.trim().toLowerCase()] = parseFloat(amount);
+                    }
+                });
+            });
+
+        function checkAllocation() {
+            let wallet = document.getElementById('walletInput').value.trim().toLowerCase();
+            let result = document.getElementById('result');
+            if (wallet in allocations) {
+                result.innerHTML = `Wallet Allocation: ${allocations[wallet]} PET`;
+            } else {
+                result.innerHTML = `Wallet Allocation: 0 PET`;
+            }
+        }
+    </script>
+</body>
+</html>
