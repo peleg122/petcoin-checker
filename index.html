@@ -55,7 +55,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>PET Wallet Allocation Checker</h2>
+        <h2>$PET Wallet Allocation Checker</h2>
         <input type="text" id="walletInput" placeholder="Enter Wallet Address">
         <button onclick="checkAllocation()">Check Allocation</button>
         <h3 id="result">Enter an address above</h3>
@@ -115,6 +115,19 @@
             }
             updateSpeculation();
         }
+    
+        function updateSpeculation() {
+            let multiplier = document.getElementById('multiplier').value;
+            let multiplierValue = document.getElementById('multiplierValue');
+            let speculatedValue = document.getElementById('speculatedValue');
+            let valueInUSD = document.getElementById('valueInUSD').innerText.replace('Value: $', '');
+            
+            let speculatedAmount = parseFloat(valueInUSD) * multiplier;
+            multiplierValue.innerHTML = `${multiplier}X`;
+            speculatedValue.innerHTML = `Speculated Value: $${speculatedAmount.toFixed(2)}`;
+        }
+    
+        document.getElementById('multiplier').addEventListener('input', updateSpeculation);
     </script>
 </body>
 </html>
