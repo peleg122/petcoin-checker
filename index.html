@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PET Wallet Checker</title>
+    <title>$PET Wallet Checker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -105,11 +105,11 @@
                 let userTokens = allocations[wallet];
                 let userAllocationBnb = (userTokens / 1_000_000_000) * fullMcBnb;
                 let userValueUsd = userAllocationBnb * bnbPrice;
-                result.innerHTML = `Wallet Allocation: ${userTokens} PET`;
+                result.innerHTML = `Wallet Allocation: ${userTokens} $PET`;
                 valueInUSD.innerHTML = `Value: $${userValueUsd.toFixed(2)}`;
                 allocationBar.style.width = Math.min(100, (userTokens / 1_000_000_000) * 100) + '%';
             } else {
-                result.innerHTML = `Wallet Allocation: 0 PET`;
+                result.innerHTML = `Wallet Allocation: 0 $PET`;
                 valueInUSD.innerHTML = `Value: $0`;
                 allocationBar.style.width = '0%';
             }
