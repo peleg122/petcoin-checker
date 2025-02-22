@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$PET Wallet Checker</title>
+    <title>PET Wallet Checker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,20 +35,47 @@
             width: 100px;
             margin-top: 10px;
         }
+        .bar-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 10px 0;
+            height: 20px;
+        }
+        .bar {
+            height: 100%;
+            background: #28a745;
+            border-radius: 10px;
+            width: 0%;
+        }
+        .slider-container {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <a href="https://petcoin.meme" class="footer-logo-wrap w-inline-block"><img src="images/Pet-Logo.png" loading="lazy" width="99" sizes="99px" alt="" srcset="images/Pet-Logo-p-500.png 500w, images/Pet-Logo-p-800.png 800w, images/Pet-Logo-p-1080.png 1080w, images/Pet-Logo.png 1735w" class="footer-logo"></a>
     <div class="container">
         <h2>PET Wallet Allocation Checker</h2>
         <input type="text" id="walletInput" placeholder="Enter Wallet Address">
         <button onclick="checkAllocation()">Check Allocation</button>
         <h3 id="result">Enter an address above</h3>
-        <img src="https://petcoin.meme/images/Coin-p-1080.png" alt="Petcoin Logo">
+        <div class="bar-container">
+            <div class="bar" id="allocationBar"></div>
+        </div>
+        <h4 id="valueInUSD">Value: $0</h4>
+        <div class="slider-container">
+            <label for="multiplier">Speculation (1X - 100X):</label>
+            <input type="range" id="multiplier" min="1" max="100" value="1" oninput="updateSpeculation()">
+            <span id="multiplierValue">1X</span>
+            <h4 id="speculatedValue">Speculated Value: $0</h4>
+        </div>
+        <img src="https://petcoin.meme/images/Pet-Logo-p-800.png" alt="Petcoin Logo">
     </div>
 
     <script>
         let allocations = {};
+        let bnbPrice = 652;
+        let fullMcBnb = 100;
 
         fetch('allocations.csv')
             .then(response => response.text())
@@ -65,11 +92,33 @@
         function checkAllocation() {
             let wallet = document.getElementById('walletInput').value.trim().toLowerCase();
             let result = document.getElementById('result');
+            let allocationBar = document.getElementById('allocationBar');
+            let valueInUSD = document.getElementById('valueInUSD');
+            
             if (wallet in allocations) {
-                result.innerHTML = `Wallet Allocation: ${allocations[wallet]} $PET`;
+                let userTokens = allocations[wallet];
+                let userAllocationBnb = (userTokens / 1_000_000_000) * fullMcBnb;
+                let userValueUsd = userAllocationBnb * bnbPrice;
+                result.innerHTML = `Wallet Allocation: ${userTokens} $PET`;
+                valueInUSD.innerHTML = `Value: $${userValueUsd.toFixed(2)}`;
+                allocationBar.style.width = Math.min(100, (userTokens / 1_000_000_000) * 100) + '%';
             } else {
                 result.innerHTML = `Wallet Allocation: 0 $PET`;
+                valueInUSD.innerHTML = `Value: $0`;
+                allocationBar.style.width = '0%';
             }
+            updateSpeculation();
+        }
+
+        function updateSpeculation() {
+            let multiplier = document.getElementById('multiplier').value;
+            let multiplierValue = document.getElementById('multiplierValue');
+            let speculatedValue = document.getElementById('speculatedValue');
+            let valueInUSD = document.getElementById('valueInUSD').innerText.replace('Value: $', '');
+            
+            let speculatedAmount = parseFloat(valueInUSD) * multiplier;
+            multiplierValue.innerHTML = `${multiplier}X`;
+            speculatedValue.innerHTML = `Speculated Value: $${speculatedAmount.toFixed(2)}`;
         }
     </script>
 </body>
