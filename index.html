@@ -43,7 +43,7 @@
         <input type="text" id="walletInput" placeholder="Enter Wallet Address">
         <button onclick="checkAllocation()">Check Allocation</button>
         <h3 id="result">Enter an address above</h3>
-        <img src="https://petcoin.meme/petcoin-logo.png" alt="Petcoin Logo">
+        <img src="https://petcoin.meme/images/Coin-p-1080.png" alt="Petcoin Logo">
     </div>
 
     <script>
@@ -65,9 +65,9 @@
             let wallet = document.getElementById('walletInput').value.trim().toLowerCase();
             let result = document.getElementById('result');
             if (wallet in allocations) {
-                result.innerHTML = `Wallet Allocation: ${allocations[wallet]} PET`;
+                result.innerHTML = `Wallet Allocation: ${allocations[wallet]} $PET`;
             } else {
-                result.innerHTML = `Wallet Allocation: 0 PET`;
+                result.innerHTML = `Wallet Allocation: 0 $PET`;
             }
         }
     </script>
